@@ -77,6 +77,8 @@ export const updateProduct = async (req: Request, res: Response) => {
             availability: req.body.availability
     })
 
+    await product.save();
+
     return res.json({ data: product })
 }
 
