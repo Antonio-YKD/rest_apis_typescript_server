@@ -71,7 +71,11 @@ export const updateProduct = async (req: Request, res: Response) => {
         })
     }
 
-    await product.update(req.body)
+    await product.update({
+            name: req.body.name,
+            price: req.body.price,
+            availability: req.body.availability
+    })
 
     return res.json({ data: product })
 }
