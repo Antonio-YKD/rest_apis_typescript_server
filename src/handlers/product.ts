@@ -55,7 +55,7 @@ export const createProduct = async (req: Request, res: Response) => {
 }
 
 export const updateProduct = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
+    const id = Number(req.params.id as string)
 
     if (isNaN(id)) {
         return res.status(400).json({
