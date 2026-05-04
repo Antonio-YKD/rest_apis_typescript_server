@@ -19,16 +19,28 @@ connectDB();
 
 const server = express();
 
-const corsOptions : CorsOptions = {
-    origin: function(origin, callback){
-        if(origin === `${process.env.FRONTEND_URL}`){
-            callback(null, true)
-        }else{
-            callback(new Error('Error de Cors'))
-        }
+
+const corsOptions: CorsOptions = {
+  origin(origin, callback) {
+    console.log("ORIGIN:", origin);
+
+    if (!origin) return callback(null, true);
+
+    const allowed = process.env.FRONTEND_URL;
+
+    const normalize = (url: string) => url.replace(/\/$/, "");
+
+    if (normalize(origin) === normalize(allowed!)) {
+      return callback(null, true);
     }
-}
-server.use(cors(corsOptions))
+
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  credentials: true
+};
+
+server.use(cors(corsOptions));
 
 server.use(express.json())
 

@@ -55,8 +55,7 @@ export const createProduct = async (req: Request, res: Response) => {
 }
 
 export const updateProduct = async (req: Request, res: Response) => {
-
-    const id = Number(req.params.id)
+    const id = Number(req.params.id as string)
 
     if (isNaN(id)) {
         return res.status(400).json({
@@ -72,24 +71,13 @@ export const updateProduct = async (req: Request, res: Response) => {
         })
     }
 
-    const name = req.body.name?.trim()
-    const price = Number(req.body.price)
-    const availability =
-        req.body.availability === true ||
-        req.body.availability === 'true'
-
-    if (!name || isNaN(price)) {
-        return res.status(400).json({
-            errors: [{ msg: 'Datos inválidos' }]
-        })
-    }
-
-    // 🔥 UPDATE limpio
     await product.update({
-        name,
-        price,
-        availability
+            name: req.body.name,
+            price: req.body.price,
+            availability: req.body.availability
     })
+
+    await product.save();
 
     return res.json({ data: product })
 }
